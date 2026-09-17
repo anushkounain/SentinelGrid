@@ -1,51 +1,72 @@
 # SentinelGrid — Occlusion-Resistant 3D Crowd Counting
 
-An end-to-end multi-camera crowd-counting and surveillance pipeline for synchronized, calibrated camera views.
+> An end-to-end multi-camera crowd counting and surveillance pipeline using YOLO, camera calibration, ground-plane projection, and cross-view spatial fusion.
 
-SentinelGrid detects people in multiple camera feeds, projects detected foot-points onto a common ground plane using camera homographies, and fuses overlapping observations into a unified bird's-eye occupancy map.
+SentinelGrid is an AI-powered multi-camera crowd counting system designed to estimate a unified number of people across overlapping camera views.
 
-The system records timestamped events, raises configurable capacity alerts, and exports event statistics as a CSV report.
+Instead of independently counting people in every camera and adding the results together—which can cause the same person to be counted multiple times—SentinelGrid projects detected people onto a shared ground plane and performs spatial fusion across camera views.
 
-## What is Included
+The project uses the **WILDTRACK multi-camera pedestrian dataset** for model training and evaluation.
 
-| Requirement | Implementation |
-|---|---|
-| Overlapping calibrated CCTV feeds | Multi-image `/api/analyze` endpoint with per-camera homographies |
-| Camera geometry | `/api/geometry` calculates the fundamental matrix and image-to-ground homographies from camera poses |
-| Deep person detection | YOLO person detector fine-tuned on WILDTRACK |
-| Unified ground-plane count | Confidence-prioritized spatial fusion across camera views |
-| Alerts and event statistics | Configurable capacity limit with persistent `data/events.csv` |
-| Visual result | Web dashboard with individual camera views, bird's-eye map, metrics, and CSV download |
+---
 
-## Project Structure
+## ✨ Features
+
+- 🎥 Multi-camera person detection
+- 🤖 YOLO-based deep person detection
+- 📐 Camera calibration and geometric projection
+- 🌍 Image-to-ground-plane homography transformation
+- 🔄 Cross-camera spatial fusion
+- 👥 Unified crowd counting
+- 🗺️ Bird's-eye occupancy visualization
+- 🚨 Configurable crowd-capacity alerts
+- 📊 Event statistics and CSV logging
+- 🔬 WILDTRACK-based training and evaluation
+- 🌐 Web dashboard for visualizing results
+- 📡 FastAPI backend for analysis and geometry APIs
+
+---
+
+## 🧠 How It Works
+
+The SentinelGrid pipeline follows these steps:
 
 ```text
-SentinelGrid/
-│
-├── backend/
-│   └── main.py
-│
-├── config/
-│   ├── calibrations.example.json
-│   └── calibrations.json
-│
-├── data/
-│   └── events.csv
-│
-├── frontend/
-│   ├── app.js
-│   ├── index.html
-│   └── styles.css
-│
-├── models/
-│   └── best.pt
-│
-├── notebooks/
-│   └── train_wildtrack_colab.ipynb
-│
-├── scripts/
-│   └── calibration.py
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
+                 ┌─────────────────────┐
+                 │  Multiple Cameras   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   YOLO Detection    │
+                 │   Person Detection  │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │  Foot-point        │
+                 │  Extraction         │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Ground-plane        │
+                 │ Homography          │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Cross-view Spatial  │
+                 │ Fusion              │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Unified Crowd Count │
+                 └──────────┬──────────┘
+                            │
+                 ┌──────────┴──────────┐
+                 ▼                     ▼
+        ┌─────────────────┐   ┌─────────────────┐
+        │ Bird's-eye Map  │   │ Capacity Alerts │
+        └─────────────────┘   └─────────────────┘
